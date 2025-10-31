@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аренда катафалков</title>
+<style>
+  body { background:#111; color:#eee; font-family:"Montserrat",sans-serif; padding:20px; }
+  h1 { text-align:center; }
+  .btn { padding:8px 15px; border:none; border-radius:5px; background:#a97b50; color:#fff; cursor:pointer; margin-top:5px; }
+  .cars-container { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px; margin-top:20px; }
+  .car-card { background:#222; padding:15px; border-radius:10px; text-align:center; }
+  .car-card img { width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+  select, input { margin-top:5px; padding:5px; border-radius:5px; border:none; width:100%; }
+</style>
+</head>
+<body>
+
+<h1>Аренда катафалков</h1>
+<a href="admin.html" class="btn">Перейти в админку</a>
+
+<main>
+  <section class="cars-container" id="carsContainer"></section>
+</main>
+
+<script>
+const carsContainer = document.getElementById("carsContainer");
+
+// Машины с возможностью добавить фото (указываешь путь к картинке)
+let cars = JSON.parse(localStorage.getItem("funeralBookings")) || [
+  { name: "Машина А", plate: "A123BC", photo: "images/car1.jpg", bookings: [] },
+  { name: "Машина B", plate: "B456CD", photo: "images/car2.jpg", bookings: [] }
+];
+
+const slots = ["09:00-10:00","10:00-11:00","11:00-12:00","12:00-13:00","13:00-14:00","14:00-15:00","15:00-16:00","16:00-17:00"];
+
+function showCars() {
+  carsContainer.innerHTML = "";
+  cars.forEach(car => {
+    const card = document.createElement("div");
+    card.className = "car-card";
+    card.innerHTML = `<img src="${car.photo}" alt="${car.name}"><h3>${car.name} (${car.plate})</h3>`;
+
+    const selectTime = document.createElement("select");
+    slots.forEach(slot => {
+      const option = document.createElement("option");
+      option.value = slot;
+      option.textContent = slot;
+      if(car.bookings.some(b=>b.time===slot && b.confirmed)) option.disabled = true;
+      selectTime.appendChild(option);
+    });
+
+    const inputName = document.createElement("input");
+    inputName.type = "text";
+    inputName.placeholder = "Имя клиента";
+
+    const inputDate = document.createElement("input");
+    inputDate.type = "date";
+
+    const btnBook = document.createElement("button");
+    btnBook.textContent = "Забронировать";
+    btnBook.className = "btn";
+
+    btnBook.onclick = () => {
+      const time = selectTime.value;
+      const client = inputName.value.trim();
+      const date = inputDate.value;
+      if(!client || !date){ alert("Введите имя и дату"); return; }
+      if(!confirm(`Подтвердите бронь: ${car.name} на ${time}, ${date} для ${client}?`)) return;
+
+      const booking = { time, client, date, confirmed:false, expired:false };
+      car.bookings.push(booking);
+      localStorage.setItem("funeralBookings", JSON.stringify(cars));
+      alert("Бронь создана! Ожидает подтверждения админом.");
+      showCars();
+
+      // Автоистечение через 15 минут, если не подтверждено
+      setTimeout(() => {
+        const idx = car.bookings.indexOf(booking);
+        if(idx!==-1 && !booking.confirmed){
+          booking.expired = true;
+          localStorage.setItem("funeralBookings", JSON.stringify(cars));
+        }
+      }, 15*60*1000);
+    };
+
+    card.appendChild(selectTime);
+    card.appendChild(inputDate);
+    card.appendChild(inputName);
+    card.appendChild(btnBook);
+
+    carsContainer.appendChild(card);
+  });
+}
+
+showCars();
+</script>
+
+</body>
+</html>

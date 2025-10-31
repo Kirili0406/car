@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка бронирования</title>
+<style>
+  body { background:#111; color:#eee; font-family:"Montserrat",sans-serif; padding:20px; }
+  h1 { text-align:center; margin-bottom:20px; }
+  .admin-container { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px; }
+  .admin-card { background:#222; padding:15px; border-radius:12px; text-align:center; }
+  .admin-card img { width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+  .booking-item { margin:5px 0; padding:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; background:#444; }
+  .booking-item.confirmed { background:#e74c3c; color:#fff; }
+  .booking-item.pending { background:#2ecc71; color:#fff; }
+  .btn { padding:5px 10px; border:none; border-radius:5px; background:#a97b50; color:#fff; cursor:pointer; margin-left:5px; }
+</style>
+</head>
+<body>
+
+<h1>Админка бронирования</h1>
+<div class="admin-container" id="adminList"></div>
+
+<script>
+const adminList = document.getElementById("adminList");
+let cars = JSON.parse(localStorage.getItem("funeralBookings")) || [];
+
+function showAdmin() {
+  adminList.innerHTML = "";
+
+  cars.forEach(car=>{
+    const card = document.createElement("div");
+    card.className = "admin-card";
+    card.innerHTML = `<img src="${car.photo}" alt="${car.name}"><h3>${car.name} (${car.plate})</h3>`;
+
+    car.bookings.forEach(b=>{
+      if(!b.expired){
+        const div = document.createElement("div");
+        div.className = "booking-item";
+        div.textContent = `${b.date} ${b.time} - ${b.client}`;
+
+        if(b.confirmed) div.classList.add("confirmed");
+        else div.classList.add("pending");
+
+        if(!b.confirmed){
+          const confirmBtn = document.createElement("button");
+          confirmBtn.className = "btn";
+          confirmBtn.textContent = "Одобрить";
+          confirmBtn.onclick = () => {
+            b.confirmed = true;
+            localStorage.setItem("funeralBookings", JSON.stringify(cars));
+            showAdmin();
+          };
+          div.appendChild(confirmBtn);
+        }
+
+        card.appendChild(div);
+      }
+    });
+
+    adminList.appendChild(card);
+  });
+}
+
+showAdmin();
+</script>
+
+</body>
+</html>

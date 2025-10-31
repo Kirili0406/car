@@ -1,0 +1,233 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background: #111;
+  color: #eee;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  position: relative;
+  height: 100vh;
+  background: url("images/funeral-bg.jpg") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+header .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  color: #ccc;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 30px;
+  background: #a97b50;
+  color: #fff;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #c99b70;
+}
+
+/* MAIN */
+main {
+  padding: 60px 20px;
+  text-align: center;
+  background: #181818;
+}
+
+main h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.cars-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* CARD */
+.car-card {
+  background: #222;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.car-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(169, 123, 80, 0.5);
+}
+
+.car-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.car-info {
+  padding: 20px;
+}
+
+.car-info h3 {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.status {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.status.free {
+  color: #4caf50; /* зеленый */
+}
+
+.status.busy {
+  color: #f44336; /* красный */
+}
+
+button {
+  background: #a97b50;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background: #c99b70;
+}
+
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+
+/* ADMIN PAGE */
+.admin-card {
+  background: #222;
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.admin-card ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-card li {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.admin-card li.free {
+  background: #2ecc71; /* зелёный для свободного времени */
+}
+
+.admin-card li.busy {
+  background: #e74c3c; /* красный для занятого времени */
+}
+
+header h1 {
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* INPUTS */
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #111;
+  color: #eee;
+}
+
+input::placeholder {
+  color: #777;
+}
+
+/* ADAPTIVE */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  main {
+    padding: 40px 10px;
+  }
+}
+/* Красивый стиль для кнопки */
+.btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #a97b50, #c99b70);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(169,123,80,0.4);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(169,123,80,0.6);
+  background: linear-gradient(135deg, #c99b70, #e0b380);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(169,123,80,0.4);
+}
